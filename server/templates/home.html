@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{%  block body %}
+
+<div class="container shadow-lg p-3 mb-5 bg-white rounded">
+
+    <form action="/api" method="post">
+        <label>Person Taking Device Out</label>
+        <br>
+         <input type="text" placeholder="Name" name="user">
+         <br>
+         <button type="submit" class="btn btn-primary">Submit</button>
+         
+    </form>
+
+
+</div>
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Time Checked Out</th>
+        <th scope="col">Time Checked In</th>
+        <th scope="col"></th>
+
+      </tr>
+    </thead>
+    <tbody>
+        {% for log in logs %}
+
+    
+
+      <tr>
+        <th scope="row">{{loop.counter}}</th>
+        <td>{{log.user}}</td>
+        <td>{{log.timein}}</td>
+        <td>{{log.timeout}}</td>
+        {% if log.timeout %}
+        
+        <td></td>
+       
+        {% else %}
+        <td><a href="/api/{{log.id}}"><button class="btn btn-success">Check In Device</button> </a> </td>
+       {% endif %}
+       <td><a href="/api/delete/{{log.id}}" ><button class="btn btn-primary" type="submit">Delete</button> </a></td>
+      </tr>
+ {% endfor %}     
+    </tbody>
+  </table>
+
+
+{% endblock %} 
