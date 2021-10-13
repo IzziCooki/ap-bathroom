@@ -9,7 +9,7 @@ app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://xlhchzvlqttlfb:bace9ec293b9454e49e580c08f33463f56ee836f664c82e78fbfa8b0e5d94388@ec2-3-221-100-217.compute-1.amazonaws.com:5432/ddtm5qfaum265e"
 app.secret_key = "super secret key"
 db = SQLAlchemy(app)
-
+print("test")
 
 
 class log(db.Model):
