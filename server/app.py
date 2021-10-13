@@ -35,12 +35,18 @@ def index():
 
 @app.route("/api", methods=["POST"])
 def logout():
+
+    logs = log.query.all()
+  
+    for l in logs:
+        if not l.timeout:
+            flash("The device is Already Logged Out by " + str(l.user))
+            return redirect(url_for("home"))
+
     user = request.form["user"]
     newLog = log(user=user)
     db.session.add(newLog)
     db.session.commit()
-
-
 
    
 
@@ -54,17 +60,23 @@ def home():
         print(data)
         
 
-    logs = log.query.all()
+    if request.args.get('page_num'):
+        page_num =  int(request.args.get("page_num"))
+
+        employees = log.query.order_by(log.id.desc()).paginate(per_page=5, page=page_num, error_out=True)
+        
+        return render_template('home.html', employees=employees)
+
+    logs = log.query.order_by(log.id.desc()).paginate(per_page=5, page=1, error_out=True)
 
 
-    return render_template('home.html', logs = logs)
+    return render_template('home.html', employees = logs)
+
+
+
 
 @app.route("/api/<int:id>", methods=["GET"])
 def checkout(id):
-
-    if request.method == "DELETE": 
-        print("deleting")
-
 
     updatedLog = log.query.filter_by(id=id).first()
     updatedLog.timeout = func.now()
